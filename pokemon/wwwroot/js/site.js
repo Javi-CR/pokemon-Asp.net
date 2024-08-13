@@ -66,29 +66,31 @@
         }
 
         let vida = poke.stats.find(stat => stat.stat.name === "hp").base_stat;
+        let peso = (poke.weight / 10).toFixed(1); // Convertir de hectogramos a kilogramos y redondear a una decimal
 
         const div = document.createElement("div");
         div.classList.add("pokemon");
         div.innerHTML = `
-            <p class="pokemon-id-back">#${pokeId}</p>
-            <div class="pokemon-imagen">
-                <img src="${poke.sprites.other["official-artwork"].front_default}" alt="${poke.name}">
+        <p class="pokemon-id-back">#${pokeId}</p>
+        <div class="pokemon-imagen">
+            <img src="${poke.sprites.other["official-artwork"].front_default}" alt="${poke.name}">
+        </div>
+        <div class="pokemon-info">
+            <div class="nombre-contenedor">
+                <p class="pokemon-id">#${pokeId}</p>
+                <h2 class="pokemon-nombre">${poke.name}</h2>
             </div>
-            <div class="pokemon-info">
-                <div class="nombre-contenedor">
-                    <p class="pokemon-id">#${pokeId}</p>
-                    <h2 class="pokemon-nombre">${poke.name}</h2>
-                </div>
-                <div class="pokemon-tipos">
-                    ${tipos}
-                </div>
-                <div class="pokemon-stats">
-                    <p class="stat">Vida: ${vida}</p>
-                    <p class="stat">Debilidades: ${debilidades.join(', ')}</p>
-                    <p class="stat">Evoluciones: ${evoluciones.join(' ➜ ')}</p>
-                </div>
+            <div class="pokemon-tipos">
+                ${tipos}
             </div>
-        `;
+            <div class="pokemon-stats">
+                <p class="stat">Vida: ${vida}</p>
+                <p class="stat">Peso: ${peso} kg</p>
+                <p class="stat">Debilidades: ${debilidades.join(', ')}</p>
+                <p class="stat">Evoluciones: ${evoluciones.join(' ➜ ')}</p>
+            </div>
+        </div>
+    `;
         listaPokemon.append(div);
     }
 
