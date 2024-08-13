@@ -394,3 +394,60 @@ main {
     }
 }
 
+.text-center {
+    text-align: center;
+    padding: 2rem;
+}
+
+.display-4 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: var(--clr-black);
+}
+
+.intro-image {
+    margin: 2rem 0;
+}
+
+.responsive-image {
+    max-width: 100%;
+    height:300px;
+    border-radius: 1rem;
+    box-shadow: 0 0 2rem -1rem rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: var(--clr-black);
+    font-weight: 600;
+}
+
+p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--clr-black);
+}
+
+.roles-list {
+    text-align: left;
+    margin: 0 auto 2rem auto;
+    max-width: 600px;
+    padding-left: 0;
+}
+
+    .roles-list li {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+ul.list-unstyled li::before {
+    content: '•';
+    color: var(--type-fire);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+

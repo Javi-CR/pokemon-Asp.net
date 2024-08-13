@@ -12,11 +12,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Configurar la identidad y ajustar los requisitos de la contraseña
+// Configurar la identidad y ajustar los requisitos de la contraseï¿½a
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
-    // Ajusta los requisitos de la contraseña según tus necesidades
+    // Ajusta los requisitos de la contraseï¿½a segï¿½n tus necesidades
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
@@ -107,7 +107,7 @@ static async Task CreateRolesAndUsersAsync(RoleManager<IdentityRole> roleManager
             {
                 UserName = userInfo.UserName,
                 Email = userInfo.Email,
-                EmailConfirmed = true // Confirmar el correo electrónico al crear el usuario
+                EmailConfirmed = true // Confirmar el correo electrï¿½nico al crear el usuario
             };
             var result = await userManager.CreateAsync(user, userInfo.Password);
             if (result.Succeeded)
@@ -141,7 +141,7 @@ static async Task CreateRolesAndUsersAsync(RoleManager<IdentityRole> roleManager
             {
                 UserName = userInfo.UserName,
                 Email = userInfo.Email,
-                EmailConfirmed = true // Confirmar el correo electrónico al crear el usuario
+                EmailConfirmed = true // Confirmar el correo electrï¿½nico al crear el usuario
             };
             var result = await userManager.CreateAsync(user, userInfo.Password);
             if (result.Succeeded)
