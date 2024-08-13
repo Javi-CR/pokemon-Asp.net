@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using pokemon.Models;
 
 namespace pokemon.Data
 {
@@ -9,5 +10,7 @@ namespace pokemon.Data
             : base(options)
         {
         }
+
+        public DbSet<PokemonSelection> PokemonSelections { get; set; }
     }
 }

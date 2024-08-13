@@ -1,0 +1,33 @@
+﻿@model pokemon.Models.PokemonSelection
+
+@{
+    ViewData["Title"] = "Selecciona tu Pokémon";
+}
+
+<div id="pokemon-selection">
+    @if (Model != null)
+    {
+        <div>
+            <h4>@Model.Name</h4>
+            <img src="@Model.ImageUrl" alt="@Model.Name" />
+            <p>Vida: @Model.Life</p>
+        </div>
+    }
+    else
+    {
+        <p>No has seleccionado ningún Pokémon aún.</p>
+    }
+</div>
+
+<form method="post" asp-controller="Pokemon" asp-action="SelectPokemon">
+    <input type="hidden" id="pokemonName" name="name" />
+    <input type="hidden" id="pokemonImageUrl" name="imageUrl" />
+    <input type="hidden" id="pokemonLife" name="life" />
+    <button type="submit" class="btn btn-primary">Guardar Selección</button>
+</form>
+
+<div id="listaPokemon" class="pokemon-lista">
+    <!-- Aquí se listarán los Pokémon -->
+</div>
+
+<script src="~/js/pokemon.js"></script>

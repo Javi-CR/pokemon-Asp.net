@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using pokemon.Models;
 using System.Diagnostics;
@@ -18,12 +19,18 @@ namespace pokemon.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+
+        [Route("Pokedex")]
+        public IActionResult Pokedex()
         {
             return View();
         }
+        
+      
 
-        public IActionResult Pokedex()
+        [Route("Pokemon")]
+        [Authorize(Roles = "entrenador")] // Restringir a usuarios con el rol "entrenador"
+        public IActionResult Pokemon()
         {
             return View();
         }
