@@ -4,10 +4,13 @@
     const modal = document.getElementById('modalSeleccion');
     const closeModal = document.querySelector('#modalSeleccion .close');
     const listaPokemonFiltro = document.getElementById('listaPokemonFiltro');
+    const btnCrearEquipo = document.getElementById('btnCrearEquipo');
+    const nombreEquipoInput = document.getElementById('nombreEquipo');
+    const nombreEquipoContainer = document.getElementById('nombreEquipoContainer');
 
     document.getElementById('btnAgregarPokemon').addEventListener('click', function () {
         modal.style.display = 'block';
-        cargarPokemon(); // Carga todos los Pokémon al abrir el modal
+        cargarPokemon();
     });
 
     closeModal.addEventListener('click', function () {
@@ -21,13 +24,13 @@
     });
 
     document.getElementById('ver-todos-filtro').addEventListener('click', function () {
-        cargarPokemon(); // Muestra todos los Pokémon
+        cargarPokemon();
     });
 
     document.querySelectorAll('.nav-item button').forEach(button => {
         button.addEventListener('click', function () {
             const tipo = this.id.replace('-filtro', '');
-            cargarPokemon(tipo); // Filtra por tipo
+            cargarPokemon(tipo);
         });
     });
 
@@ -38,60 +41,94 @@
                 .then(response => response.json())
                 .then(data => {
                     if (tipo === '' || data.types.some(t => t.type.name === tipo)) {
-                        mostrarPokemonFiltro(data);
+                        const pokemonDiv = document.createElement('div');
+                        pokemonDiv.className = 'pokemon-card';
+                        pokemonDiv.innerHTML = `
+                            <img src="${data.sprites.front_default}" alt="${data.name}" />
+                            <h3>${data.name}</h3>
+                            <button onclick="seleccionarPokemon('${data.name}', '${data.sprites.front_default}', ${data.stats[0].base_stat})">Seleccionar</button>
+                        `;
+                        listaPokemonFiltro.appendChild(pokemonDiv);
                     }
                 });
         }
     }
 
-    function mostrarPokemonFiltro(poke) {
-        let tipos = poke.types.map(type => `<p class="${type.type.name} tipo">${type.type.name}</p>`).join('');
-        let pokeId = poke.id.toString().padStart(3, '0');
-        const div = document.createElement("div");
-        div.classList.add("pokemon");
-        div.innerHTML = `
-            <p class="pokemon-id-back">#${pokeId}</p>
-            <div class="pokemon-imagen">
-                <img src="${poke.sprites.other["official-artwork"].front_default}" alt="${poke.name}">
-            </div>
-            <div class="pokemon-info">
-                <div class="nombre-contenedor">
-                    <p class="pokemon-id">#${pokeId}</p>
-                    <h2 class="pokemon-nombre">${poke.name}</h2>
-                </div>
-                <div class="pokemon-tipos">
-                    ${tipos}
-                </div>
-                <button class="btn btn-select-pokemon" data-name="${poke.name}" data-image="${poke.sprites.other["official-artwork"].front_default}" data-life="${poke.stats.find(stat => stat.stat.name === "hp").base_stat}">Seleccionar</button>
-            </div>
-        `;
+    window.seleccionarPokemon = function (name, imageUrl, life) {
+        if (equipoDiv.children.length >= 5) {
+            alert('No puedes agregar más de 5 Pokémon al equipo.');
+            return;
+        }
 
-        div.querySelector(".btn-select-pokemon").addEventListener("click", function () {
-            agregarPokemonAEquipo(this.dataset.name, this.dataset.image, this.dataset.life);
+        const pokemonDiv = document.createElement('div');
+        pokemonDiv.className = 'pokemon-item';
+        pokemonDiv.innerHTML = `
+            <img src="${imageUrl}" alt="${name}" />
+            <h4>${name}</h4>
+            <button onclick="eliminarPokemon(this)">Eliminar</button>
+        `;
+        equipoDiv.appendChild(pokemonDiv);
+        modal.style.display = 'none';
+
+        const pokemon = {
+            Name: name,
+            ImageUrl: imageUrl,
+            Life: life
+        };
+
+        const pokemons = JSON.parse(localStorage.getItem('pokemons')) || [];
+        pokemons.push(pokemon);
+        localStorage.setItem('pokemons', JSON.stringify(pokemons));
+
+        nombreEquipoContainer.style.display = 'block';  // Mostrar campo de nombre
+        nombreEquipoInput.addEventListener('input', function () {
+            btnCrearEquipo.disabled = !this.value.trim();  // Habilitar botón solo si hay nombre
         });
 
-        listaPokemonFiltro.appendChild(div);
-    }
-
-    function agregarPokemonAEquipo(name, imageUrl, life) {
-        if (equipoDiv.children.length < 5) {
-            const div = document.createElement("div");
-            div.classList.add("pokemon-equipo");
-            div.innerHTML = `
-                <h3>${name}</h3>
-                <img src="${imageUrl}" alt="${name}" />
-                <p>Vida: ${life}</p>
-                <button class="btn btn-remove-pokemon">Eliminar</button>
-            `;
-
-            div.querySelector(".btn-remove-pokemon").addEventListener("click", function () {
-                equipoDiv.removeChild(div);
-            });
-
-            equipoDiv.appendChild(div);
-            modal.style.display = 'none';
-        } else {
-            alert('Tu equipo ya está completo. Puedes eliminar un Pokémon antes de agregar uno nuevo.');
+        if (equipoDiv.children.length >= 5) {
+            btnCrearEquipo.style.display = 'block';
         }
-    }
+    };
+
+    window.eliminarPokemon = function (button) {
+        button.parentElement.remove();
+        const pokemons = JSON.parse(localStorage.getItem('pokemons')) || [];
+        const nameToRemove = button.previousElementSibling.textContent;
+        const updatedPokemons = pokemons.filter(p => p.Name !== nameToRemove);
+        localStorage.setItem('pokemons', JSON.stringify(updatedPokemons));
+
+        if (equipoDiv.children.length < 5) {
+            btnCrearEquipo.style.display = 'none';
+        }
+
+        if (equipoDiv.children.length === 0) {
+            nombreEquipoContainer.style.display = 'none';  // Ocultar campo de nombre si no hay Pokémon
+            btnCrearEquipo.style.display = 'none';
+        }
+    };
+
+    btnCrearEquipo.addEventListener('click', function () {
+        const pokemons = JSON.parse(localStorage.getItem('pokemons')) || [];
+        const nombreEquipo = nombreEquipoInput.value;
+
+        fetch('/Equipo/Crear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                NombreEquipo: nombreEquipo,
+                Pokemons: pokemons
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Equipo creado con éxito!');
+                    window.location.reload();
+                } else {
+                    alert('Error al crear el equipo.');
+                }
+            });
+    });
 });

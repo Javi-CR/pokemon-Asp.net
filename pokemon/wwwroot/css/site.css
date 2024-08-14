@@ -450,6 +450,7 @@ ul.list-unstyled li::before {
     margin-left: -1em;
 }
 
+
 .modal {
     display: none;
     position: fixed;
@@ -459,7 +460,6 @@ ul.list-unstyled li::before {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
 }
 
@@ -490,45 +490,146 @@ ul.list-unstyled li::before {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
-
-.pokemon-equipo {
-    flex: 1 1 18%; 
+.pokemon-item {
+    flex: 1 1 18%;
     box-sizing: border-box;
     text-align: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }
 
-    .pokemon-equipo img {
-        max-width: 100px; 
+    .pokemon-item img {
+        max-width: 100px;
         height: auto;
     }
 
-    .pokemon-equipo h3 {
-        font-size: 1rem; 
+    .pokemon-item h4 {
+        font-size: 1rem;
+        margin: 10px 0;
     }
 
-    .pokemon-equipo p {
-        font-size: 0.8rem; 
+    .pokemon-item button {
+        background-color: #c62828; 
+        color: #ffffff;
+        border: none;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
     }
 
-.btn-remove-pokemon {
-    background-color: #c62828; 
-    color: #ffffff; 
-    border: none; 
-    padding: 10px 20px; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
-    margin: 4px 2px; 
-    cursor: pointer; 
-    border-radius: 5px; 
-    transition: transform 0.2s ease; 
+        .pokemon-item button:hover {
+            background-color: #b71c1c;
+        }
+
+.pokemon-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 10px;
 }
 
-    .btn-remove-pokemon:hover {
-        transform: scale(1.1); 
-        color: #ffffff;
+    .pokemon-card img {
+        max-width: 150px;
+        height: auto;
     }
 
+    .pokemon-card h3 {
+        font-size: 1rem;
+        margin: 10px 0;
+    }
+
+    .pokemon-card button {
+        background-color: #4CAF50; 
+        color: #ffffff;
+        border: none;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .pokemon-card button:hover {
+            background-color: #388E3C;
+        }
+
+
+.btn-agregar-pokemon {
+    background-color: #4CAF50;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-agregar-pokemon:hover {
+        background-color: #388E3C;
+    }
+
+#btnAgregarPokemon {
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+}
+
+#btnCrearEquipo {
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+    background-color: #4CAF50;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+    #btnCrearEquipo:hover {
+        background-color: #218838; 
+    }
+
+#nombreEquipoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; 
+}
+
+
+#nombreEquipo {
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%; 
+    max-width: 300px; 
+    margin-bottom: 10px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

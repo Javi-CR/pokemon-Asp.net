@@ -224,6 +224,56 @@ namespace pokemon.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("pokemon.Models.Equipo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Equipos");
+                });
+
+            modelBuilder.Entity("pokemon.Models.Pokemon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EquipoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagenUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Vida")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EquipoId");
+
+                    b.ToTable("Pokemons");
+                });
+
             modelBuilder.Entity("pokemon.Models.PokemonSelection", b =>
                 {
                     b.Property<int>("Id")
@@ -250,40 +300,6 @@ namespace pokemon.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PokemonSelections");
-                });
-
-            modelBuilder.Entity("pokemon.Models.PokemonTeam", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Life")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PokemonName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PokemonTeams");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -337,15 +353,20 @@ namespace pokemon.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("pokemon.Models.PokemonTeam", b =>
+            modelBuilder.Entity("pokemon.Models.Pokemon", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                    b.HasOne("pokemon.Models.Equipo", "Equipo")
+                        .WithMany("Pokemons")
+                        .HasForeignKey("EquipoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Equipo");
+                });
+
+            modelBuilder.Entity("pokemon.Models.Equipo", b =>
+                {
+                    b.Navigation("Pokemons");
                 });
 #pragma warning restore 612, 618
         }

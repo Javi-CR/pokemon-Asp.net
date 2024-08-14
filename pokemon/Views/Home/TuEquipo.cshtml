@@ -5,7 +5,10 @@
 <div class="row justify-content-center align-items-center text-center">
     <h1 class="display-4 text-center">Tu Equipo</h1>
     <button id="btnAgregarPokemon" class="btn btn-header ice w-50 mb-5">Agregar Pokémon</button>
-    <div id="equipo">
+    <div id="equipo" class="mb-3"></div>
+    <div class="mb-3" id="nombreEquipoContainer" style="display: none;">
+        <input type="text" id="nombreEquipo" placeholder="Nombre de tu equipo" />
+        <button id="btnCrearEquipo" class="btn btn-header ice w-50 mb-5" style="display: none;" disabled>Crear Equipo</button>
     </div>
 </div>
 
@@ -36,11 +39,11 @@
                 <li class="nav-item"><button class="btn btn-header fairy" id="fairy-filtro">Fairy</button></li>
             </ul>
         </nav>
-        <div id="listaPokemonFiltro">
-        </div>
+        <div id="listaPokemonFiltro"></div>
     </div>
 </div>
 
+<!-- Campos ocultos para datos del Pokémon -->
 <input type="hidden" id="pokemonName" />
 <input type="hidden" id="pokemonImageUrl" />
 <input type="hidden" id="pokemonLife" />

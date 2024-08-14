@@ -13,16 +13,17 @@ namespace pokemon.Data
 
         public DbSet<PokemonSelection> PokemonSelections { get; set; }
 
-        public DbSet<PokemonTeam> PokemonTeams { get; set; }
+        public DbSet<Equipo> Equipos { get; set; }
+        public DbSet<Pokemon> Pokemons { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
-            builder.Entity<PokemonTeam>()
-                .HasOne(pt => pt.User)
-                .WithMany()
-                .HasForeignKey(pt => pt.UserId);
+            modelBuilder.Entity<Equipo>()
+                .HasMany(e => e.Pokemons)
+                .WithOne(p => p.Equipo)
+                .HasForeignKey(p => p.EquipoId);
         }
     }
 }
