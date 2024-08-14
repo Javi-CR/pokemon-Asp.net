@@ -25,8 +25,13 @@ namespace pokemon.Controllers
         {
             return View();
         }
-        
-      
+
+        [Route("TuEquipo")]
+        [Authorize(Roles = "entrenador")] // Restringir a usuarios con el rol "entrenador"
+        public IActionResult TuEquipo()
+        {
+            return View();
+        }
 
         [Route("Pokemon")]
         [Authorize(Roles = "entrenador")] // Restringir a usuarios con el rol "entrenador"

@@ -28,6 +28,12 @@
                         @if (User.IsInRole("entrenador"))
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="TuEquipo">Tu Equipo</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("entrenador"))
+                        {
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Pokemon">Pokemon</a>
                             </li>
                         }

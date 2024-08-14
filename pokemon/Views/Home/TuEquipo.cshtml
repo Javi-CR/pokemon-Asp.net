@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Tu Equipo";
+}
+
+<div class="row justify-content-center align-items-center text-center">
+    <h1 class="display-4 text-center">Tu Equipo</h1>
+    <button id="btnAgregarPokemon" class="btn btn-header ice w-50 mb-5">Agregar Pokémon</button>
+    <div id="equipo">
+    </div>
+</div>
+
+<div id="modalSeleccion" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Selecciona un Pokémon</h2>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item"><button class="btn btn-header" id="ver-todos-filtro">Ver todos</button></li>
+                <li class="nav-item"><button class="btn btn-header normal" id="normal-filtro">Normal</button></li>
+                <li class="nav-item"><button class="btn btn-header fire" id="fire-filtro">Fire</button></li>
+                <li class="nav-item"><button class="btn btn-header water" id="water-filtro">Water</button></li>
+                <li class="nav-item"><button class="btn btn-header grass" id="grass-filtro">Grass</button></li>
+                <li class="nav-item"><button class="btn btn-header electric" id="electric-filtro">Electric</button></li>
+                <li class="nav-item"><button class="btn btn-header ice" id="ice-filtro">Ice</button></li>
+                <li class="nav-item"><button class="btn btn-header fighting" id="fighting-filtro">Fighting</button></li>
+                <li class="nav-item"><button class="btn btn-header poison" id="poison-filtro">Poison</button></li>
+                <li class="nav-item"><button class="btn btn-header ground" id="ground-filtro">Ground</button></li>
+                <li class="nav-item"><button class="btn btn-header flying" id="flying-filtro">Flying</button></li>
+                <li class="nav-item"><button class="btn btn-header psychic" id="psychic-filtro">Psychic</button></li>
+                <li class="nav-item"><button class="btn btn-header bug" id="bug-filtro">Bug</button></li>
+                <li class="nav-item"><button class="btn btn-header rock" id="rock-filtro">Rock</button></li>
+                <li class="nav-item"><button class="btn btn-header ghost" id="ghost-filtro">Ghost</button></li>
+                <li class="nav-item"><button class="btn btn-header dark" id="dark-filtro">Dark</button></li>
+                <li class="nav-item"><button class="btn btn-header dragon" id="dragon-filtro">Dragon</button></li>
+                <li class="nav-item"><button class="btn btn-header steel" id="steel-filtro">Steel</button></li>
+                <li class="nav-item"><button class="btn btn-header fairy" id="fairy-filtro">Fairy</button></li>
+            </ul>
+        </nav>
+        <div id="listaPokemonFiltro">
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="pokemonName" />
+<input type="hidden" id="pokemonImageUrl" />
+<input type="hidden" id="pokemonLife" />
+
+<script src="~/js/tuequipo.js"></script>
