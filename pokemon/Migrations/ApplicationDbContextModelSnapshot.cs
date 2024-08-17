@@ -8,7 +8,7 @@ using pokemon.Data;
 
 #nullable disable
 
-namespace pokemon.Data.Migrations
+namespace pokemon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
