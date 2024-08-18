@@ -16,6 +16,8 @@ namespace pokemon.Data
         public DbSet<Equipo> Equipos { get; set; }
         public DbSet<Pokemon> Pokemons { get; set; }
 
+        public DbSet<ChatMessage> ChatMessages { get; set; } 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

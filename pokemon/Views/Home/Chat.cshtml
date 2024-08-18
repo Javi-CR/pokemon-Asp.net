@@ -1,0 +1,69 @@
+﻿@model IEnumerable<pokemon.Models.ChatMessage>
+
+@{
+    ViewData["Title"] = "Chat Global";
+}
+
+<h2>Chat Global</h2>
+
+<!-- Ventana del chat donde se mostrarán los mensajes -->
+<div id="chatWindow" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var message in Model)
+        {
+            <div>
+                <strong>@message.UserName</strong> <small>(@message.Timestamp.ToString("g"))</small>:
+                <p>@message.Message</p>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No hay mensajes en el chat.</p>
+    }
+</div>
+
+<!-- Formulario para enviar nuevos mensajes -->
+<form id="chatForm">
+    <div class="form-group">
+        <textarea name="message" class="form-control" rows="3" placeholder="Escribe tu mensaje..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Manejar el envío del formulario usando AJAX
+            $('#chatForm').submit(function (event) {
+                event.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SendMessage", "Chat")',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        // Cargar de nuevo el contenido del chat
+                        $('#chatWindow').load('@Url.Action("Index", "Chat") #chatWindow > *', function () {
+                            // Auto-scroll para mostrar el último mensaje
+                            var chatWindow = document.getElementById("chatWindow");
+                            chatWindow.scrollTop = chatWindow.scrollHeight;
+                        });
+                    },
+                    error: function () {
+                        alert('Hubo un error al enviar el mensaje. Por favor, inténtalo de nuevo.');
+                    }
+                });
+
+                // Limpiar el campo de texto después de enviar el mensaje
+                $('#chatForm textarea').val('');
+            });
+
+            // Auto-scroll inicial para mostrar el último mensaje al cargar la página
+            var chatWindow = document.getElementById("chatWindow");
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        });
+    </script>
+}
