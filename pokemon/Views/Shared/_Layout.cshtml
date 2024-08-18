@@ -32,7 +32,27 @@
                             </li>
 
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Retos">Retos</a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Chat">Chat Global</a>
+                            </li>
+
+                        }
+
+                        @if (User.IsInRole("enfermeria"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Curar">Curar</a>
+                            </li>
+
+                        }
+
+                        @if (User.IsInRole("administrador"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AdminUsuarios">Admin Usuarios</a>
                             </li>
 
                         }

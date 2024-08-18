@@ -4,10 +4,10 @@
     ViewData["Title"] = "Chat Global";
 }
 
-<h2>Chat Global</h2>
+<h2 class="display-4 text-center">Chat Global</h2>
 
 <!-- Ventana del chat donde se mostrarán los mensajes -->
-<div id="chatWindow" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
+<div id="chatWindow" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;" class="mb-3">
     @if (Model != null && Model.Any())
     {
         @foreach (var message in Model)
@@ -26,10 +26,10 @@
 
 <!-- Formulario para enviar nuevos mensajes -->
 <form id="chatForm">
-    <div class="form-group">
+    <div class="form-group mb-3">
         <textarea name="message" class="form-control" rows="3" placeholder="Escribe tu mensaje..." required></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Enviar</button>
+    <button type="submit" class="btn btn-header ice w-25 mb-5">Enviar</button>
 </form>
 
 @section Scripts {

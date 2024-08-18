@@ -44,6 +44,13 @@ namespace pokemon.Controllers
             return View();
         }
 
+        [Route("Retos")]
+        [Authorize(Roles = "entrenador")] // Restringir a usuarios con el rol "entrenador"
+        public IActionResult Retos()
+        {
+            return View();
+        }
+
         [Route("Chat")]
         [Authorize(Roles = "entrenador")] // Restringir a usuarios con el rol "entrenador"
         public IActionResult Chat()
@@ -54,6 +61,19 @@ namespace pokemon.Controllers
             return View(messages);
         }
 
+        [Route("Curar")]
+        [Authorize(Roles = "enfermeria")] // Restringir a usuarios con el rol "enfermeria"
+        public IActionResult Curar()
+        {
+            return View();
+        }
+
+        [Route("AdminUsuarios")]
+        [Authorize(Roles = "administrador")] // Restringir a usuarios con el rol "administrador"
+        public IActionResult AdminUsuarios()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
