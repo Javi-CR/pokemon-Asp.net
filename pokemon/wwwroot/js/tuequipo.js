@@ -76,13 +76,16 @@
             Life: life
         };
 
+        // Guardar en localStorage
         const pokemons = JSON.parse(localStorage.getItem('pokemons')) || [];
-        pokemons.push(pokemon);
-        localStorage.setItem('pokemons', JSON.stringify(pokemons));
+        if (!pokemons.some(p => p.Name === name)) {  // Verificar si ya está en la lista
+            pokemons.push(pokemon);
+            localStorage.setItem('pokemons', JSON.stringify(pokemons));
+        }
 
-        nombreEquipoContainer.style.display = 'block';  // Mostrar campo de nombre
+        nombreEquipoContainer.style.display = 'block';
         nombreEquipoInput.addEventListener('input', function () {
-            btnCrearEquipo.disabled = !this.value.trim();  // Habilitar botón solo si hay nombre
+            btnCrearEquipo.disabled = !this.value.trim();
         });
 
         if (equipoDiv.children.length >= 5) {
@@ -102,7 +105,7 @@
         }
 
         if (equipoDiv.children.length === 0) {
-            nombreEquipoContainer.style.display = 'none';  // Ocultar campo de nombre si no hay Pokémon
+            nombreEquipoContainer.style.display = 'none';
             btnCrearEquipo.style.display = 'none';
         }
     };
@@ -111,6 +114,7 @@
         const pokemons = JSON.parse(localStorage.getItem('pokemons')) || [];
         const nombreEquipo = nombreEquipoInput.value;
 
+        // Enviar datos al servidor
         fetch('/Equipo/Crear', {
             method: 'POST',
             headers: {
@@ -125,9 +129,10 @@
             .then(data => {
                 if (data.success) {
                     alert('Equipo creado con éxito!');
+                    localStorage.removeItem('pokemons');  // Limpiar localStorage
                     window.location.reload();
                 } else {
-                    alert('Error al crear el equipo.');
+                    alert('Error al crear el equipo: ' + (data.message || 'Error desconocido.'));
                 }
             });
     });
