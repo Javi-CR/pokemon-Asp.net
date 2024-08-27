@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using pokemon.Data;
 using pokemon.Models;
 using System.Diagnostics;
@@ -83,6 +84,8 @@ namespace pokemon.Controllers
         }
 
 
+        [Route("Retos")]
+        [Authorize(Roles = "entrenador")]
         public async Task<IActionResult> Retos()
         {
             var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -141,12 +144,72 @@ namespace pokemon.Controllers
             return View(messages);
         }
 
+
+
         [Route("Curar")]
         [Authorize(Roles = "enfermeria")]
-        public IActionResult Curar()
+        public async Task<IActionResult> Curar()
         {
-            return View();
+            // Obtener los equipos con al menos un Pokémon cuya vida sea 0
+            var equipos = await _context.Equipos
+                .Where(e => e.Pokemons.Any(p => p.Vida == 0))
+                .Select(e => new CurarViewModel
+                {
+                    // Se obtiene el nombre de usuario usando el UserManager
+                    EntrenadorNombre = _context.Users.FirstOrDefault(u => u.Id == e.UsuarioId).UserName,
+                    EquipoId = e.Id,
+                    EquipoNombre = e.Nombre,
+                    Pokemons = e.Pokemons.Where(p => p.Vida == 0).Select(p => new PokemonViewModel
+                    {
+                        PokemonId = p.Id,
+                        Nombre = p.Nombre,
+                        ImagenUrl = p.ImagenUrl,
+                        Vida = p.Vida
+                    }).ToList()
+                }).ToListAsync();
+
+            return View(equipos);
         }
+
+
+
+        [HttpPost]
+        [Authorize(Roles = "enfermeria")]
+        public async Task<IActionResult> CurarEquipo(int equipoId)
+        {
+            var equipo = await _context.Equipos
+                .Include(e => e.Pokemons)
+                .FirstOrDefaultAsync(e => e.Id == equipoId);
+
+            if (equipo == null)
+            {
+                return NotFound();
+            }
+
+            using (var httpClient = new HttpClient())
+            {
+                foreach (var pokemon in equipo.Pokemons.Where(p => p.Vida == 0))
+                {
+                    var response = await httpClient.GetStringAsync($"https://pokeapi.co/api/v2/pokemon/{pokemon.Nombre.ToLower()}");
+                    var data = JObject.Parse(response);
+
+                    // Obtener el valor de "hp" del Pokémon desde la API
+                    var hp = data["stats"].First(stat => (string)stat["stat"]["name"] == "hp")["base_stat"].Value<int>();
+
+                    // Restablecer la vida del Pokémon
+                    pokemon.Vida = hp;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["Resultado"] = "El equipo ha sido curado con éxito.";
+            return RedirectToAction(nameof(Curar));
+        }
+
+
+
+
 
         [Route("AdminUsuarios")]
         [Authorize(Roles = "administrador")]

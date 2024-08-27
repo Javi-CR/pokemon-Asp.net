@@ -1,8 +1,57 @@
-﻿@{
-    ViewData["Title"] = "Retos";
+﻿@model List<CurarViewModel>
+
+@{
+    ViewData["Title"] = "Curar Equipos";
+    var resultado = TempData["Resultado"]?.ToString();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Curar a los equipos</h1>
-</div>
+@if (!string.IsNullOrEmpty(resultado))
+{
+    <div class="alert alert-success">@resultado</div>
+}
 
+<h2>Equipos para Curar</h2>
+
+@if (Model.Count == 0)
+{
+    <p>No hay equipos con Pokémon que necesiten ser curados.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Entrenador</th>
+                <th>Equipo</th>
+                <th>Pokémon</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var equipo in Model)
+            {
+                <tr>
+                    <td>@equipo.EntrenadorNombre</td>
+                    <td>@equipo.EquipoNombre</td>
+                    <td>
+                        <ul class="list-unstyled">
+                            @foreach (var pokemon in equipo.Pokemons)
+                            {
+                                <li>
+                                    <img src="@pokemon.ImagenUrl" alt="@pokemon.Nombre" style="width: 50px; height: 50px;" />
+                                    @pokemon.Nombre - Vida: @pokemon.Vida
+                                </li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        <form asp-action="CurarEquipo" method="post">
+                            <input type="hidden" name="equipoId" value="@equipo.EquipoId" />
+                            <button type="submit" class="btn btn-primary">Curar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
