@@ -1,8 +1,61 @@
-﻿@{
+﻿@model RetosViewModel
+
+@{
     ViewData["Title"] = "Retos";
+    var resultado = TempData["Resultado"]?.ToString();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Retar a otro entrenador</h1>
-</div>
+@if (!string.IsNullOrEmpty(resultado))
+{
+    <div class="alert alert-info">@resultado</div>
+}
 
+<div class="container">
+    <div class="row">
+        <!-- Usuarios a retar -->
+        <div class="col-md-6">
+            <h3>Entrenadores Disponibles</h3>
+            <ul class="list-group">
+                @foreach (var entrenador in Model.Entrenadores)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>@entrenador.UserName</strong> - @entrenador.EquipoNombre
+                        </div>
+                        <form asp-action="Retar" method="post">
+                            <input type="hidden" name="retadoId" value="@entrenador.UsuarioId" />
+                            <button class="btn @(entrenador.TodosPokemonsConVida0 ? "btn-danger" : "btn-primary")"
+                            @(entrenador.TodosPokemonsConVida0 || Model.TodosPokemonsConVida0 ? "disabled" : "")>
+                                Retar
+                            </button>
+                        </form>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Equipo del usuario -->
+        <div class="col-md-6">
+            @if (Model.CurrentUserTeam != null)
+            {
+                <h3>Tu Equipo Pokémon (@Model.CurrentUserTeam.Nombre)</h3>
+                <div class="row">
+                    @foreach (var pokemon in Model.CurrentUserTeam.Pokemons)
+                    {
+                        <div class="col-md-4 text-center">
+                            <img src="@pokemon.ImagenUrl" alt="@pokemon.Nombre" class="img-fluid" />
+                            <h5>@pokemon.Nombre</h5>
+                            <p>Vida: @pokemon.Vida</p>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    ¡No tienes un equipo Pokémon! Crea uno antes de retar a otros entrenadores.
+                </div>
+            }
+        </div>
+    </div>
+</div>
