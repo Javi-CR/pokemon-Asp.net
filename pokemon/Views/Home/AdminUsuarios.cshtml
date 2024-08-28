@@ -1,8 +1,49 @@
 ﻿@{
-    ViewData["Title"] = "Retos";
+    ViewData["Title"] = "Usuarios";
 }
 
 <div class="text-center">
     <h1 class="display-4">Administrar Usuarios</h1>
 </div>
 
+@if (TempData["Resultado"] != null)
+{
+    <div class="alert alert-info">@TempData["Resultado"]</div>
+}
+
+<table class="table table-striped table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>
+                    <input type="text" class="form-control" value="@usuario.UserName" id="nombre_@usuario.Id" />
+                </td>
+                <td>
+                    <input type="email" class="form-control" value="@usuario.Email" id="email_@usuario.Id" />
+                </td>
+                <td class="d-flex align-items-center">
+                    <form method="post" asp-action="EditarUsuario" class="mr-2">
+                        <input type="hidden" name="id" value="@usuario.Id" />
+                        <input type="hidden" name="nuevoNombre" id="nuevoNombre_@usuario.Id" />
+                        <input type="hidden" name="nuevoEmail" id="nuevoEmail_@usuario.Id" />
+                        <button type="submit" class="btn btn-primary" onclick="document.getElementById('nuevoNombre_@usuario.Id').value = document.getElementById('nombre_@usuario.Id').value; document.getElementById('nuevoEmail_@usuario.Id').value = document.getElementById('email_@usuario.Id').value;">
+                            Editar
+                        </button>
+                    </form>
+                    <form method="post" asp-action="EliminarUsuario" class="d-inline">
+                        <input type="hidden" name="id" value="@usuario.Id" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?');">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

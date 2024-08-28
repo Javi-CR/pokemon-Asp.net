@@ -240,12 +240,73 @@ namespace pokemon.Controllers
 
 
 
+        // Acción para mostrar usuarios entrenadores
         [Route("AdminUsuarios")]
         [Authorize(Roles = "administrador")]
-        public IActionResult AdminUsuarios()
+        public async Task<IActionResult> AdminUsuarios()
         {
-            return View();
+            var todosLosUsuarios = await _context.Users.ToListAsync();
+
+            var entrenadores = todosLosUsuarios
+                .Where(u => _userManager.IsInRoleAsync(u, "entrenador").Result)
+                .Select(u => new
+                {
+                    u.Id,
+                    u.UserName,
+                    u.Email
+                })
+                .ToList();
+
+            return View(entrenadores);
         }
+
+
+        // Acción para editar un usuario
+        [HttpPost]
+        [Authorize(Roles = "administrador")]
+        public async Task<IActionResult> EditarUsuario(string id, string nuevoNombre, string nuevoEmail)
+        {
+            var usuario = await _userManager.FindByIdAsync(id);
+            if (usuario != null)
+            {
+                usuario.UserName = nuevoNombre;
+                usuario.Email = nuevoEmail;
+
+                var result = await _userManager.UpdateAsync(usuario);
+                if (result.Succeeded)
+                {
+                    TempData["Resultado"] = "Usuario actualizado con éxito.";
+                }
+                else
+                {
+                    TempData["Resultado"] = "Error al actualizar el usuario.";
+                }
+            }
+            return RedirectToAction(nameof(AdminUsuarios));
+        }
+
+        // Acción para eliminar un usuario
+        [HttpPost]
+        [Authorize(Roles = "administrador")]
+        public async Task<IActionResult> EliminarUsuario(string id)
+        {
+            var usuario = await _userManager.FindByIdAsync(id);
+            if (usuario != null)
+            {
+                var result = await _userManager.DeleteAsync(usuario);
+                if (result.Succeeded)
+                {
+                    TempData["Resultado"] = "Usuario eliminado con éxito.";
+                }
+                else
+                {
+                    TempData["Resultado"] = "Error al eliminar el usuario.";
+                }
+            }
+            return RedirectToAction(nameof(AdminUsuarios));
+        }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
