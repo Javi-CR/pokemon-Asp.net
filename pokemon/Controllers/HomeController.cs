@@ -134,6 +134,35 @@ namespace pokemon.Controllers
         }
 
 
+
+        [HttpPost]
+        [Authorize(Roles = "entrenador")]
+        public async Task<IActionResult> EliminarEquipo()
+        {
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var equipo = await _context.Equipos
+                .Include(e => e.Pokemons)
+                .FirstOrDefaultAsync(e => e.UsuarioId == usuarioId);
+
+            if (equipo != null)
+            {
+                _context.Pokemons.RemoveRange(equipo.Pokemons);
+                _context.Equipos.Remove(equipo);
+                await _context.SaveChangesAsync();
+                TempData["Resultado"] = "Tu equipo ha sido eliminado exitosamente.";
+            }
+            else
+            {
+                TempData["Resultado"] = "No tienes un equipo que eliminar.";
+            }
+
+            return RedirectToAction("Retos");
+        }
+
+
+
+
         [Route("Chat")]
         [Authorize(Roles = "entrenador")]
         public IActionResult Chat()

@@ -22,30 +22,44 @@ public class EquipoController : Controller
         {
             var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Verificar si el equipo ya existe
-            var equipoExistente = _context.Equipos
+            // Verificar si ya existe un equipo para el usuario
+            var equipoExistente = await _context.Equipos
                 .Include(e => e.Pokemons)
-                .FirstOrDefault(e => e.UsuarioId == usuarioId && e.Nombre == model.NombreEquipo);
+                .FirstOrDefaultAsync(e => e.UsuarioId == usuarioId);
 
             if (equipoExistente != null)
             {
-                return Json(new { success = false, message = "Ya existe un equipo con ese nombre." });
-            }
+                // Si ya existe un equipo, actualizar el existente
+                equipoExistente.Nombre = model.NombreEquipo;
+                equipoExistente.Pokemons.Clear();
 
-            // Crear un nuevo equipo
-            var equipo = new Equipo
-            {
-                Nombre = model.NombreEquipo,
-                UsuarioId = usuarioId,
-                Pokemons = model.Pokemons.Take(5).Select(p => new Pokemon
+                equipoExistente.Pokemons = model.Pokemons.Take(5).Select(p => new Pokemon
                 {
                     Nombre = p.Name,
                     ImagenUrl = p.ImageUrl,
                     Vida = p.Life
-                }).ToList()
-            };
+                }).ToList();
 
-            _context.Equipos.Add(equipo);
+                _context.Equipos.Update(equipoExistente);
+            }
+            else
+            {
+                // Si no existe un equipo, crear uno nuevo
+                var nuevoEquipo = new Equipo
+                {
+                    Nombre = model.NombreEquipo,
+                    UsuarioId = usuarioId,
+                    Pokemons = model.Pokemons.Take(5).Select(p => new Pokemon
+                    {
+                        Nombre = p.Name,
+                        ImagenUrl = p.ImageUrl,
+                        Vida = p.Life
+                    }).ToList()
+                };
+
+                _context.Equipos.Add(nuevoEquipo);
+            }
+
             await _context.SaveChangesAsync();
 
             return Json(new { success = true });
